@@ -86,6 +86,7 @@ export const TimeSeriesTooltip = memo(function TimeSeriesTooltip({
           maxWidth: TOOLTIP_MAX_WIDTH,
           maxHeight: TOOLTIP_MAX_HEIGHT,
           padding: 0,
+          // position: pinnedPos !== null ? 'sticky' : 'absolute',
           position: 'absolute',
           top: 0,
           left: 0,

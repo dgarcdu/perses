@@ -23,6 +23,8 @@ function App() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
+        width: '100%',
+        height: '100%',
         minHeight: '100vh',
         backgroundColor: ({ palette }) => palette.background.default,
       }}
@@ -32,6 +34,8 @@ function App() {
         sx={{
           flex: 1,
           display: 'flex',
+          width: '100%',
+          height: '100%',
         }}
       >
         <Router />
