@@ -49,7 +49,7 @@ import {
   LegendProps,
   useId,
   TimeChart,
-  // TimeChartSeriesMapping,
+  TimeChartSeriesMapping,
 } from '@perses-dev/components';
 import { TimeSeriesChartOptions, DEFAULT_UNIT, DEFAULT_VISUAL } from './time-series-chart-model';
 import {
@@ -162,7 +162,7 @@ export function TimeSeriesChartPanel(props: TimeSeriesChartProps) {
     // Utilizes ECharts dataset so raw data is separate from series option style properties
     // https://apache.github.io/echarts-handbook/en/concepts/dataset/
     const timeChartData: TimeSeries[] = [];
-    const timeSeriesMapping: LineSeriesOption[] = [];
+    const timeSeriesMapping: TimeChartSeriesMapping = [];
 
     // Index is counted across multiple queries which ensures the categorical color palette does not reset for every query
     let seriesIndex = 0;
@@ -285,6 +285,29 @@ export function TimeSeriesChartPanel(props: TimeSeriesChartProps) {
         seriesIndex++;
       });
     }
+
+    // const pinnedCrosshair: LineSeriesOption = {
+    //   name: 'Pinned Crosshair',
+    //   type: 'line',
+    //   // data: [1689444705000, 0.02],
+    //   data: [timeScale.startMs, 0.02],
+    //   markLine: {
+    //     data: [
+    //       {
+    //         // xAxis: 1689444705000,
+    //         xAxis: timeScale.startMs,
+    //       },
+    //     ],
+    //     lineStyle: {
+    //       width: 1,
+    //       type: 'dashed',
+    //     },
+    //     label: {
+    //       // distance: [20, 8],
+    //     },
+    //   },
+    // };
+    // timeSeriesMapping.push(pinnedCrosshair);
 
     return {
       graphData,

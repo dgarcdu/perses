@@ -264,6 +264,7 @@ export const TimeChart = forwardRef<ChartInstance, TimeChartProps>(function Time
           // https://echarts.apache.org/en/api.html#echartsInstance.convertFromPixel
           // https://echarts.apache.org/examples/en/editor.html?c=line-markline
           // TODO: see Shan annotations PR: https://github.com/perses/perses/pull/1050
+          // TODO: debug why no hard-coded markLine shows
           // const pinnedCrosshair: LineSeriesOption = {
           //   name: 'Annotations',
           //   type: 'line',
