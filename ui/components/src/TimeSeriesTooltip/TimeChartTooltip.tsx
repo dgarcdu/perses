@@ -14,9 +14,10 @@
 import { memo, useRef, useState } from 'react';
 import { Box, Portal, Stack } from '@mui/material';
 import { ECharts as EChartsInstance } from 'echarts/core';
+import type { LineSeriesOption } from 'echarts';
 import { UnitOptions, TimeSeries } from '@perses-dev/core';
 import useResizeObserver from 'use-resize-observer';
-import { TimeChartSeriesMapping } from '../model';
+// import { TimeChartSeriesMapping } from '../model';
 import { CursorCoordinates, FALLBACK_CHART_WIDTH, useMousePosition } from './tooltip-model';
 import { assembleTransform, getTooltipStyles } from './utils';
 import { getNearbySeriesData } from './nearby-series';
@@ -26,7 +27,7 @@ import { TooltipContent } from './TooltipContent';
 export interface TimeChartTooltipProps {
   chartRef: React.MutableRefObject<EChartsInstance | undefined>;
   data: TimeSeries[];
-  seriesMapping: TimeChartSeriesMapping;
+  seriesMapping: LineSeriesOption[];
   pinnedPos: CursorCoordinates | null;
   /**
    * The id of the container that will have the chart tooltip appended to it.

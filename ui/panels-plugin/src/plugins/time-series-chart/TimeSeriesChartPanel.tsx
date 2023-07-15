@@ -13,7 +13,7 @@
 
 import { useMemo, useRef, useState } from 'react';
 import { Box, Skeleton, useTheme } from '@mui/material';
-import type { GridComponentOption } from 'echarts';
+import type { GridComponentOption, LineSeriesOption } from 'echarts';
 import merge from 'lodash/merge';
 import {
   useDeepMemo,
@@ -49,7 +49,7 @@ import {
   LegendProps,
   useId,
   TimeChart,
-  TimeChartSeriesMapping,
+  // TimeChartSeriesMapping,
 } from '@perses-dev/components';
 import { TimeSeriesChartOptions, DEFAULT_UNIT, DEFAULT_VISUAL } from './time-series-chart-model';
 import {
@@ -162,7 +162,7 @@ export function TimeSeriesChartPanel(props: TimeSeriesChartProps) {
     // Utilizes ECharts dataset so raw data is separate from series option style properties
     // https://apache.github.io/echarts-handbook/en/concepts/dataset/
     const timeChartData: TimeSeries[] = [];
-    const timeSeriesMapping: TimeChartSeriesMapping = [];
+    const timeSeriesMapping: LineSeriesOption[] = [];
 
     // Index is counted across multiple queries which ensures the categorical color palette does not reset for every query
     let seriesIndex = 0;

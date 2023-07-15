@@ -49,6 +49,10 @@ import (
 	max?:   number
 }
 
+#tooltip: {
+	allow_pinning?: bool
+}
+
 kind: "TimeSeriesChart"
 spec: close({
 	legend?:            #legend
@@ -56,4 +60,5 @@ spec: close({
 	thresholds?:        common.#thresholds
 	visual?:            #visual
 	show_legacy_chart?: bool
+	tooltip?:           #tooltip
 })

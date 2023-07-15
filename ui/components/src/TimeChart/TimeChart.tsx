@@ -38,7 +38,7 @@ import {
 } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { EChart, OnEventsType } from '../EChart';
-import { ChartInstanceFocusOpts, ChartInstance, TimeChartSeriesMapping } from '../model/graph';
+import { ChartInstanceFocusOpts, ChartInstance } from '../model/graph';
 import { useChartsTheme } from '../context/ChartsThemeProvider';
 import {
   clearHighlightedSeries,
@@ -69,7 +69,7 @@ use([
 export interface TimeChartProps {
   height: number;
   data: TimeSeries[];
-  seriesMapping: TimeChartSeriesMapping;
+  seriesMapping: LineSeriesOption[];
   timeScale?: TimeScale;
   yAxis?: YAXisComponentOption;
   unit?: UnitOptions;
@@ -261,6 +261,81 @@ export const TimeChart = forwardRef<ChartInstance, TimeChartProps>(function Time
       onClick={(e) => {
         // Pin and unpin when clicking on chart canvas but not tooltip text.
         if (e.target instanceof HTMLCanvasElement) {
+          // https://echarts.apache.org/en/api.html#echartsInstance.convertFromPixel
+          // https://echarts.apache.org/examples/en/editor.html?c=line-markline
+          // TODO: see Shan annotations PR: https://github.com/perses/perses/pull/1050
+          // const pinnedCrosshair: LineSeriesOption = {
+          //   name: 'Annotations',
+          //   type: 'line',
+          //   // xAxisIndex: 1,
+          //   // data: [[startTime, null] as unknown],
+          //   // markArea: {
+          //   //   data: annotationAreas.map((a) => {
+          //   //     return [
+          //   //       {
+          //   //         xAxis: a.timestamp,
+          //   //         itemStyle: {
+          //   //           color: a.color,
+          //   //           opacity: 0.2,
+          //   //         },
+          //   //       },
+          //   //       { xAxis: a.endTimestamp },
+          //   //     ];
+          //   //   }),
+          //   // },
+          //   markLine: {
+          //     label: {
+          //       show: false,
+          //     },
+          //     symbol: 'none',
+          //     lineStyle: {
+          //       width: 1,
+          //       type: 'dashed',
+          //     },
+          //     // data: annotationLines.map((a) => ({
+          //     //   symbol: 'none',
+          //     //   symbolSize: 0,
+
+          //     //   itemStyle: {
+          //     //     color: a.color ?? undefined,
+          //     //   },
+          //     //   xAxis: a.timestamp,
+          //     // })),
+          //   },
+          // };
+          const pinnedCrosshair: LineSeriesOption = {
+            name: 'Pinned Crosshair',
+            type: 'line',
+            // data: [[startTime, null] as unknown],
+            // data: [1689444705000, 0.02],
+            data: [timeScale.startMs, 0.02],
+            markLine: {
+              // // data: [1689444705000, 0.02],
+              // data: [1689444705000, 0.02],
+              // data: annotationLines.map((a) => ({
+              //   symbol: 'none',
+              //   symbolSize: 0,
+              //   itemStyle: {
+              //     color: a.color ?? undefined,
+              //   },
+              //   xAxis: a.timestamp,
+              // })),
+              data: [
+                {
+                  // xAxis: 1689444705000,
+                  xAxis: timeScale.startMs,
+                },
+              ],
+              lineStyle: {
+                width: 1,
+                type: 'dashed',
+              },
+              label: {
+                // distance: [20, 8],
+              },
+            },
+          };
+          seriesMapping.push(pinnedCrosshair);
           setTooltipPinnedCoords((current) => {
             if (current === null) {
               return {

@@ -30,6 +30,7 @@ export interface TimeSeriesChartOptions {
   thresholds?: ThresholdOptions;
   visual?: TimeSeriesChartVisualOptions;
   show_legacy_chart?: boolean;
+  tooltip?: TimeSeriesChartTooltipOptions;
 }
 
 export type TimeSeriesChartOptionsEditorProps = OptionsEditorProps<TimeSeriesChartOptions>;
@@ -149,6 +150,10 @@ export const STACK_OPTIONS = Object.entries(STACK_CONFIG).map(([id, config]) => 
 // For negative values, we multiply to a number greater than 1 to get this outcome.
 export const POSITIVE_MIN_VALUE_MULTIPLIER = 0.8;
 export const NEGATIVE_MIN_VALUE_MULTIPLIER = 1.2;
+
+export interface TimeSeriesChartTooltipOptions {
+  allow_pinning?: boolean;
+}
 
 /**
  * Creates an initial/empty options object for the TimeSeriesChartPanel.
