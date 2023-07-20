@@ -23,6 +23,9 @@ export const INCREASE_NEARBY_SERIES_MULTIPLIER = 5.5; // adjusts how many series
 export const DYNAMIC_NEARBY_SERIES_MULTIPLIER = 30; // used for adjustment after series number divisor
 export const SHOW_FEWER_SERIES_LIMIT = 5;
 
+export const MAX_EMPHASIZED_SERIES = 10;
+export const MAX_EMPHASIZED_DATAPOINTS = 10;
+
 export interface NearbySeriesInfo {
   seriesIdx: number | null;
   datumIdx: number | null;
@@ -71,11 +74,6 @@ export function checkforNearbyTimeSeries(
   let closestTimestamp = null;
   let closestDistance = Infinity;
 
-  // // Clears selected datapoints since no bold series in tooltip, restore does not impact highlighting
-  // chart.dispatchAction({
-  //   type: 'toggleSelect', // https://echarts.apache.org/en/api.html#action.toggleSelect
-  // });
-
   // find the timestamp with data that is closest to cursorX
   for (let seriesIdx = 0; seriesIdx < totalSeries; seriesIdx++) {
     const currentSeries = seriesMapping[seriesIdx];
@@ -121,8 +119,10 @@ export function checkforNearbyTimeSeries(
                 percentage: percentRangeToCheck,
               });
               if (isClosestToCursor) {
-                // shows as bold in tooltip, customize 'emphasis' options in getTimeSeries util
-                emphasizedSeriesIndexes.push(seriesIdx);
+                if (emphasizedSeriesIndexes.length < MAX_EMPHASIZED_SERIES) {
+                  // shows as bold in tooltip, customize 'emphasis' options in getTimeSeries util
+                  emphasizedSeriesIndexes.push(seriesIdx);
+                }
 
                 // Used to determine which datapoint to apply select styles to.
                 // Accounts for cases where lines may be rendered directly on top of eachother.
@@ -137,13 +137,15 @@ export function checkforNearbyTimeSeries(
                   });
                 }
 
-                // keep track of all bold datapoints in tooltip so that 'select' state only applied to topmost
-                emphasizedDatapoints.push({
-                  seriesIndex: seriesIdx,
-                  dataIndex: datumIdx,
-                  seriesName: currentSeriesName,
-                  yValue: yValue,
-                });
+                if (emphasizedDatapoints.length < MAX_EMPHASIZED_DATAPOINTS) {
+                  // keep track of all bold datapoints in tooltip so that 'select' state only applied to topmost
+                  emphasizedDatapoints.push({
+                    seriesIndex: seriesIdx,
+                    dataIndex: datumIdx,
+                    seriesName: currentSeriesName,
+                    yValue: yValue,
+                  });
+                }
 
                 // triggers hover state for most recent closeby datapoint symbol using select.itemStyle.borderWidth
                 chart.dispatchAction({
@@ -180,14 +182,15 @@ export function checkforNearbyTimeSeries(
     }
   }
 
-  batchDispatchNearbySeriesActions(
+  batchDispatchNearbySeriesActions({
     chart,
+    totalSeries,
     nearbySeriesIndexes,
     emphasizedSeriesIndexes,
     nonEmphasizedSeriesIndexes,
     emphasizedDatapoints,
-    duplicateDatapoints
-  );
+    duplicateDatapoints,
+  });
 
   return currentNearbySeriesData;
 }

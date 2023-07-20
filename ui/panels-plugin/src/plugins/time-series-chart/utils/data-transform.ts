@@ -46,6 +46,8 @@ export const HIDE_DATAPOINTS_LIMIT = 70;
 
 export const BLUR_FADEOUT_OPACITY = 0.5;
 
+export const MINUTE_MS = 60000;
+
 /**
  * Given a list of running queries, calculates a common time scale for use on
  * the x axis (i.e. start/end dates and a step that is divisible into all of
@@ -128,9 +130,11 @@ export function getTimeSeries(
   const lineWidth = visual.line_width ?? DEFAULT_LINE_WIDTH;
   const pointRadius = visual.point_radius ?? DEFAULT_POINT_RADIUS;
 
-  // Shows datapoint symbols when selected time range is roughly 6 hours or less
-  const minuteMs = 60000;
-  let showPoints = timeScale.rangeMs <= minuteMs * 360;
+  // Shows datapoint symbols when selected time range is roughly 1 hour or less
+  let showPoints = timeScale.rangeMs <= MINUTE_MS * 60;
+
+  // Shows datapoint symbols when selected time range is roughly 1 day or less
+  // let showPoints = timeScale.rangeMs <= MINUTE_MS * 1440;
 
   // Allows overriding default behavior and opt-in to always show all symbols (can hurt performance)
   if (visual.show_points === 'Always') {
@@ -195,7 +199,6 @@ export function getTimeSeries(
       },
     },
   };
-  console.log(series);
   return series;
 }
 

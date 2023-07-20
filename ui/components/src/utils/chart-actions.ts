@@ -85,19 +85,33 @@ export function getPointInGrid(cursorCoordX: number, cursorCoordY: number, chart
   return pointInGrid;
 }
 
+export interface BatchTooltipActionsParams {
+  chart: EChartsInstance;
+  totalSeries: number;
+  nearbySeriesIndexes: number[];
+  emphasizedSeriesIndexes: number[];
+  nonEmphasizedSeriesIndexes: number[];
+  emphasizedDatapoints: DatapointInfo[];
+  duplicateDatapoints: DatapointInfo[];
+}
+
 /*
  * TimeSeriesChart tooltip is built custom to support finding nearby series instead of single or all series.
  * This means ECharts actions need to be dispatched manually for series highlighting, datapoint select state, etc.
  * More info: https://echarts.apache.org/en/api.html#action
  */
-export function batchDispatchNearbySeriesActions(
-  chart: EChartsInstance,
-  nearbySeriesIndexes: number[],
-  emphasizedSeriesIndexes: number[],
-  nonEmphasizedSeriesIndexes: number[],
-  emphasizedDatapoints: DatapointInfo[],
-  duplicateDatapoints: DatapointInfo[]
-) {
+
+export function batchDispatchNearbySeriesActions(props: BatchTooltipActionsParams) {
+  const {
+    chart,
+    totalSeries,
+    nearbySeriesIndexes,
+    emphasizedSeriesIndexes,
+    nonEmphasizedSeriesIndexes,
+    emphasizedDatapoints,
+    duplicateDatapoints,
+  } = props;
+
   // Accounts for multiple series that are rendered direct on top of eachother.
   // Only applies select state to the datapoint that is visible to avoid color mismatch.
   const lastEmphasizedDatapoint =
